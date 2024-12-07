@@ -14,6 +14,7 @@ import UpdateUser from "./Components/UpdateUser";
 import ListUsers from "./Components/ListUsers";
 import { useSelector } from "react-redux";
 import Posts from "./Components/Posts";
+import {render, screen } from '@testing-library/react';
 const App = () => {
   const email = useSelector((state) => state.users.user.email);
   return (
