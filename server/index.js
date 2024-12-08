@@ -93,18 +93,21 @@ app.post("/login", async (req, res) => {
 app.post("/logout", async (req, res) => {
   res.status(200).json({ message: "Logged out successfully" });
 });
+
 //GET API - Get Users
 app.get("/getUsers", async (req, res) => {
   try {
-    const users = await UserModel.find({}).sort({ createdAt: -1 });
-    const countUsers = await UserModel.countDocuments({});
+    const users = await UserModel.find({}).sort({ createdAt: 1 });
+    const userPost = await UserModel.countDocuments({});
 
-    res.send({ users: users, countusers: countUsers });
+    res.send({ users: users, count: userPost });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "An error occurred" });
   }
 });
+
+// *********POST**********
 //Post API - savePost
 app.post("/savePost", async (req, res) => {
   try {
