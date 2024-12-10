@@ -1,10 +1,12 @@
 import { Navbar, Nav, NavItem, NavLink } from "reactstrap";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../Images/logo-t.png";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../Features/UserSlice";
 import { FaHome, FaUserAlt, FaSignOutAlt } from "react-icons/fa";
 const Header = () => {
+  const user = useSelector((state) => state.users.user);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -30,9 +32,11 @@ const Header = () => {
           <NavItem>
             <Link to="/profile">Profile</Link>
           </NavItem>
-          <NavItem>
-            <Link to="/listUsers">List of Users</Link>
-          </NavItem>
+          {user.userType === "admin" && (
+            <NavItem>
+              <Link to="/manage">Manage</Link>
+            </NavItem>
+          )}
           <NavItem>
             <Link onClick={handlelogout}>
               <FaSignOutAlt id="logOut" />

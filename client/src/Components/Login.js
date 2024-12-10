@@ -24,7 +24,7 @@ const Login = () => {
   const user = useSelector((state) => state.users.user);
   const isSuccess = useSelector((state) => state.users.isSuccess);
   const isError = useSelector((state) => state.users.isError);
-
+  console.log(user);
   const handleLogin = () => {
     try {
       const userData = {
@@ -38,11 +38,12 @@ const Login = () => {
   useEffect(() => {
     if (isError) {
       navigate("/login");
-    }
-    if (isSuccess) {
-      navigate("/");
-    } else {
-      navigate("/login");
+    } else if (isSuccess) {
+      if (user && user.userType == "user") {
+        navigate("/");
+      } else {
+        navigate("/manage");
+      }
     }
   }, [user, isError, isSuccess]);
 

@@ -14,6 +14,7 @@ import UpdateUser from "./Components/UpdateUser";
 import ListUsers from "./Components/ListUsers";
 import { useSelector } from "react-redux";
 import Posts from "./Components/Posts";
+import Manage from "./Components/Manage";
 const App = () => {
   const email = useSelector((state) => state.users.user.email);
   return (
@@ -34,6 +35,7 @@ const App = () => {
             <Route path="/register" element={<Register />}></Route>
             <Route path="/logout" element={<Logout />}></Route>
             <Route path="/posts" element={<Posts />}></Route>
+            <Route path="/manage" element={<Manage />}></Route>
             <Route
               path="/update/:user_email/:user_name/:user_password"
               element={<UpdateUser />}
