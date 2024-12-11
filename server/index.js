@@ -40,6 +40,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 // --------- API Code ----------
+// ***********USER**************
 app.post("/registerUser", async (req, res) => {
   try {
     // Get the Values from the request body
@@ -94,20 +95,7 @@ app.post("/logout", async (req, res) => {
   res.status(200).json({ message: "Logged out successfully" });
 });
 
-//GET API - Get Users
-app.get("/getUsers", async (req, res) => {
-  try {
-    const users = await UserModel.find({}).sort({ createdAt: 1 });
-    const userPost = await UserModel.countDocuments({});
-
-    res.send({ users: users, count: userPost });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "An error occurred" });
-  }
-});
-
-// *********POST**********
+// ********* POST **********
 //Post API - savePost
 app.post("/savePost", async (req, res) => {
   try {
@@ -188,6 +176,7 @@ app.put(
     const email = req.params.email;
     const name = req.body.name;
     const password = req.body.password;
+    const userType = req.body.userType;
 
     try {
       const userToUpdate = await UserModel.findOne({ email: email });
@@ -219,6 +208,8 @@ app.put(
       }
 
       userToUpdate.name = name;
+      if (userType) userToUpdate.userType = userType;
+
       if (password !== userToUpdate.password) {
         const hashedPassword = await bcrypt.hash(password, 10);
         userToUpdate.password = hashedPassword;
@@ -232,6 +223,53 @@ app.put(
     }
   }
 );
+
+// ********** Manage ************
+//GET API - Get Users
+app.get("/getUsers", async (req, res) => {
+  try {
+    const users = await UserModel.find({}).sort({ createdAt: 1 });
+    const userCount = await UserModel.countDocuments({});
+
+    res.send({ users: users, count: userCount });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "An error occurred" });
+  }
+});
+
+//Delete API - Delete Users
+app.delete("/deleteUser/:id/", async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    const user = await UserModel.findByIdAndDelete(id);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    res.status(200).json({ id: id, msg: "User deleted successfully" });
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ error: "An error occurred while deleting the user" });
+  }
+});
+
+//GET API - for retrieving a single user
+app.get("/getUser/:id", async (req, res) => {
+  const id = req.params.id;
+  try {
+    // Find the user by _id
+    const user = await UserModel.findById(id);
+    res.send({ user: user });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "An error occurred" });
+  }
+});
+
+// **************************************************************
 const port = ENV.PORT || 3001;
 app.listen(port, () => {
   console.log(`You are connected at port: ${port}`);

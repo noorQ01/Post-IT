@@ -79,6 +79,7 @@ export const userSlice = createSlice({
   name: "users",
   initialState,
   reducers: {
+    reset: () => initialState,
     addUser: (state, action) => {
       state.value.push(action.payload);
     },
@@ -146,6 +147,6 @@ export const userSlice = createSlice({
   }, //Close of extraReducers
 });
 
-export const { addUser, deleteUser, updateUser } = userSlice.actions;
+export const { addUser, deleteUser, updateUser, reset } = userSlice.actions;
 
 export default userSlice.reducer;
